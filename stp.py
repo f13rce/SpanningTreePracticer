@@ -423,6 +423,10 @@ def AskAbbreviations():
 
 __TEST_EDGE__ = False
 def AskEdgeLabeling():
+
+	# Wait a bit before clearing the screen
+	time.sleep(1)
+
 	global highlightW
 	global highlightH
 
@@ -455,6 +459,8 @@ def AskEdgeLabeling():
 							print(colored("Correct!", "green"))
 							network[w][h].SetEdgeType(inp)
 							time.sleep(1)
+							highlightW = -1
+							highlightH = -1
 							break
 						else:
 							print(colored("Incorrect, try again", "red"))

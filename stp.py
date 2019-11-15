@@ -346,8 +346,8 @@ def main():
 #######################################################################", "magenta")
 	)
 
-	cont = True
-	while cont:
+	while True:
+		# Create exercise field
 		while True:
 			try:
 				GenerateField()
@@ -359,11 +359,12 @@ def main():
 				# I'll let it retry until it just workTM :^)
 				pass
 
-
+		# Ask questions
 		AskRootID()
 		AskAbbreviations()
 		AskEdgeLabeling()
 
+		# Done!
 		print(colored("All done!", "green"))
 		inp = input("Would you like to practise again [Y/n]? ").lower()
 		if (inp != "y"):

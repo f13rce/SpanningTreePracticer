@@ -41,9 +41,8 @@ rootH = -1
 # Classes
 class Edge:
 	classType = "Edge"
-	representation = "-XY-" # or "|\n|\n|\n|\n"
+	representation = "-XY-"
 	representationHor = "-XY-"
-	#representationVer = "|\nX\nY\n|\n"
 	representationVer = "|XY|"
 	type = 0 # 0 = Unassigned; 1 = Root Port; 2 = Designated Port; 3 = Blocked Port;
 	typeColors = ["white", "blue", "green", "red"]
@@ -112,6 +111,7 @@ class Empty:
 def GenerateField():
 	global network
 
+	# Initialize network array
 	for w in range(networkWidth):
 		network.append([])
 		for h in range(networkHeight):
@@ -155,6 +155,7 @@ def DrawField():
 	global highlightW
 	global highlightH
 
+	# For every entry, print it
 	for w in range(networkWidth):
 		for h in range(networkHeight):
 			if highlightW == w and highlightH == h:
@@ -165,6 +166,7 @@ def DrawField():
 		sys.stdout.write("\n")
 
 def GetRootID():
+	# Find root ID based on the lowest bridge value
 	lowestID = 99999
 	for w in range(networkWidth):
 		for h in range(networkHeight):

@@ -130,6 +130,7 @@ def GenerateField():
 				while True:
 					number = 10 + randrange(89)
 					if not number in randValues:
+						randValues.append(number)
 						break
 
 				# Make bridge

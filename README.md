@@ -3,17 +3,19 @@ Helps you understand the inner workings of the Spanning Tree protocol. An algori
 
 There are 3 types of questions in this script:
 
-1: Identifying the root bridge
-2: Definitions of the bridge type abbreviations
-3: Identifying bridge types
+1. Identifying the root bridge
+2. Definitions of the bridge type abbreviations
+3. Identifying bridge types
 
 Where bridges are printed as [XY], edges are printed as |XY| (vertical) or -XY- (horizontal) and networks are printed as {XY}, where XY is their ID, abbreviation or name respectively.
 
 It is possible to scale up the network by modifying the global variables "networkWidth" and "networkHeight". Be sure to make it an uneven amount larger than 5, since you need 3 components per connection: Bridge <-> Edge <-> Network (<-> Edge <-> Bridge).
 
-Example image:
+Example images:
 
-![Spanning Tree Practiser example screenshot](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExample.png)
+![Spanning Tree Practiser - Root identification](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExample.png)
+
+![Spanning Tree Practiser - Edge classification](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExample2.png)
 
 # Installation
 

@@ -7,6 +7,8 @@ There are 3 types of questions in this script:
 2: Definitions of the bridge type abbreviations
 3: Identifying bridge types
 
+Where bridges are printed as [XY], edges are printed as |XY| (vertical) or -XY- (horizontal) and networks are printed as {XY}, where XY is their ID, abbreviation or name respectively.
+
 It is possible to scale up the network by modifying the global variables "networkWidth" and "networkHeight". Be sure to make it an uneven amount larger than 5, since you need 3 components per connection: Bridge <-> Edge <-> Network (<-> Edge <-> Bridge).
 
 # Installation

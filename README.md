@@ -11,6 +11,10 @@ Where bridges are printed as [XY], edges are printed as |XY| (vertical) or -XY- 
 
 It is possible to scale up the network by modifying the global variables "networkWidth" and "networkHeight". Be sure to make it an uneven amount larger than 5, since you need 3 components per connection: Bridge <-> Edge <-> Network (<-> Edge <-> Bridge).
 
+Example image:
+
+![Spanning Tree Practiser example screenshot](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExample.png)
+
 # Installation
 
 Clone the repository:

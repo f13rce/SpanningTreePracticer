@@ -382,7 +382,7 @@ def AskRootID():
 		while True:
 			print("Labeling:\n\t[XY]: Bridge\n\t|XY|: Edge, vertical\n\t-XY-: Edge, horizontal\n\t{XY}: Network")
 			try:
-				rootInputID = int(input("Which bridge is the root? "))
+				rootInputID = int(input("Which bridge is the root (number only)? "))
 				break
 			except ValueError:
 				print("Please only type the number of the root bridge.")

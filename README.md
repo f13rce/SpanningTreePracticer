@@ -27,7 +27,7 @@ HTTPS: ``git clone https://github.com/f13rce/SpanningTreePractiser.git && cd Spa
 
 Install the required packages:
 
-``pip install -r requirements.txt``
+``pip3 install -r requirements.txt``
 
 Then run the script:
 
@@ -37,4 +37,4 @@ Then run the script:
 
 See requirements.txt. Also requires a terminal with non-personalized output colors for proper coloring, which is needed to answer questions about highlighted sections.
 
-To install the requirements, type in your terminal: ``pip install -r requirements.txt``
+To install the requirements, type in your terminal: ``pip3 install -r requirements.txt``

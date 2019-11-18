@@ -1,2 +1,31 @@
 # SpanningTreePractiser
-Helps you understand the inner workings of the Spanning Tree protocol
+Helps you understand the inner workings of the Spanning Tree protocol. An algorithm was used to solve the tree for you, where you get questions on how each edge should be defined.
+
+There are 3 types of questions in this script:
+
+1: Identifying the root bridge
+2: Definitions of the bridge type abbreviations
+3: Identifying bridge types
+
+It is possible to scale up the network by modifying the global variables "networkWidth" and "networkHeight". Be sure to make it an uneven amount larger than 5, since you need 3 components per connection: Bridge <-> Edge <-> Network (<-> Edge <-> Bridge).
+
+# Installation
+
+Clone the repository:
+
+SSH: ``git clone git@github.com:/f13rce/SpanningTreePractiser.git``
+HTTPS: ``git clone https://github.com/f13rce/SpanningTreePractiser.git``
+
+Install the required packages:
+
+``pip install -r requirements.txt``
+
+Then run the script:
+
+``python3 stp.py``
+
+# Requirements
+
+See requirements.txt. Also requires a terminal with non-personalized output colors for proper coloring, which is needed to answer questions about highlighted sections.
+
+To install the requirements, type in your terminal: ``pip install -r requirements.txt``

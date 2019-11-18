@@ -29,6 +29,10 @@ Install the required packages:
 
 ``pip3 install -r requirements.txt``
 
+If this doesn't work try:
+
+``python3.6 -m pip install -r requirements.txt --user``
+
 Then run the script:
 
 ``python3 stp.py``

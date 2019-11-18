@@ -13,8 +13,9 @@ It is possible to scale up the network by modifying the global variables "networ
 
 Clone the repository:
 
-SSH: ``git clone git@github.com:/f13rce/SpanningTreePractiser.git``
-HTTPS: ``git clone https://github.com/f13rce/SpanningTreePractiser.git``
+SSH: ``git clone git@github.com:/f13rce/SpanningTreePractiser.git && cd SpanningTreePractiser``
+
+HTTPS: ``git clone https://github.com/f13rce/SpanningTreePractiser.git && cd SpanningTreePractiser``
 
 Install the required packages:
 

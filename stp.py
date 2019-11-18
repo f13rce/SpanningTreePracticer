@@ -380,6 +380,7 @@ def AskRootID():
 	while True:
 		DrawField()
 		while True:
+			print("Labeling:\n\t[XY]: Bridge\n\t|XY|: Edge, vertical\n\t-XY-: Edge, horizontal\n\t{XY}: Network")
 			try:
 				rootInputID = int(input("Which bridge is the root? "))
 				break

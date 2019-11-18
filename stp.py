@@ -331,23 +331,7 @@ def main():
 	global highlightW
 	global highlightH
 
-	print( colored("#######################################################################\n\
-#   _____                         _               _______             #\n\
-#  / ____|                       (_)             |__   __|            #\n\
-# | (___  _ __   __ _ _ __  _ __  _ _ __   __ _     | |_ __ ___  ___  #\n\
-#  \___ \| '_ \ / _` | '_ \| '_ \| | '_ \ / _` |    | | '__/ _ \/ _ \ #\n\
-#  ____) | |_) | (_| | | | | | | | | | | | (_| |    | | | |  __/  __/ #\n\
-# |_____/| .__/ \__,_|_|_|_|_| |_|_|_| |_|\__, |    |_|_|  \___|\___| #\n\
-# |  __ \| |           | | (_)             __/ |                      #\n\
-# | |__) |_|_ __ _  ___| |_ _ ___  ___ _ _|___/                       #\n\
-# |  ___/ '__/ _` |/ __| __| / __|/ _ \ '__|                          #\n\
-# | |   | | | (_| | (__| |_| |(__|  __/ |                             #\n\
-# |_|   |_|  \__,_|\___|\__|_\___/\___|_|                             #\n\
-#                                                                     #\n\
-#######################################################################\n\
-#                     Made by Ivar Slotboom :)                        #\n\
-#######################################################################", "magenta")
-	)
+	DrawHeader()
 
 	while True:
 		# Create exercise field
@@ -374,13 +358,41 @@ def main():
 			print("Bye, good luck with the exam! :)")
 			break
 
+def DrawHeader():
+	print( colored("#######################################################################\n\
+#   _____                         _               _______             #\n\
+#  / ____|                       (_)             |__   __|            #\n\
+# | (___  _ __   __ _ _ __  _ __  _ _ __   __ _     | |_ __ ___  ___  #\n\
+#  \___ \| '_ \ / _` | '_ \| '_ \| | '_ \ / _` |    | | '__/ _ \/ _ \ #\n\
+#  ____) | |_) | (_| | | | | | | | | | | | (_| |    | | | |  __/  __/ #\n\
+# |_____/| .__/ \__,_|_|_|_|_| |_|_|_| |_|\__, |    |_|_|  \___|\___| #\n\
+# |  __ \| |           | | (_)             __/ |                      #\n\
+# | |__) |_|_ __ _  ___| |_ _ ___  ___ _ _|___/                       #\n\
+# |  ___/ '__/ _` |/ __| __| / __|/ _ \ '__|                          #\n\
+# | |   | | | (_| | (__| |_| |(__|  __/ |                             #\n\
+# |_|   |_|  \__,_|\___|\__|_\___/\___|_|                             #\n\
+#                                                                     #\n\
+#######################################################################\n\
+#                     Made by Ivar Slotboom :)                        #\n\
+#######################################################################", "magenta")
+	)
+
+
 def AskRootID():
 	# Root ID
 	rootID = int(GetRootID())
 	while True:
+		print("")
+		print("Consider the following network:")
 		DrawField()
 		while True:
-			print("Labeling:\n\t[XY]: Bridge\n\t|XY|: Edge, vertical\n\t-XY-: Edge, horizontal\n\t{XY}: Network")
+			print("")
+			print("Labeling:")
+			print(colored("\t[XY]: Bridge", "magenta"))
+			print(colored("\t-XY-: Edge (horizontal)", "white"))
+			print(colored("\t|XY|: Edge (vertical)", "white"))
+			print(colored("\t{XY}: Network", "cyan"))
+			print("")
 			try:
 				rootInputID = int(input("Which bridge is the root (number only)? "))
 				break
@@ -410,6 +422,8 @@ def AskAbbreviations():
 		if inp == "root port":
 			print(colored("Correct!", "green"))
 			break
+		elif inp == "research project":
+			print(colored("Well yes, but actually no.", "red"))
 		else:
 			print(colored("Incorrect, try again.", "red"))
 
@@ -447,12 +461,18 @@ def AskEdgeLabeling():
 						# Ignore OS-relates errors
 						pass
 
+					DrawHeader()
+
 					# Draw the field
+					print("")
+					print("In the context of the same network:")
 					highlightW = w
 					highlightH = h
 					DrawField()
 
+					print("")
 					print("(Note that some answers could theoretically be correct, but is routed differently instead in this exercise.)")
+					print("")
 
 					# Draw field and let user guess
 					while True:
@@ -468,7 +488,10 @@ def AskEdgeLabeling():
 							print(colored("Incorrect, try again", "red"))
 							#print("Answer was: {}".format(network[w][h].answer))
 
+	print("")
+	print("Final network:")
 	DrawField()
+	print("")
 
 
 if __name__ == "__main__":

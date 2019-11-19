@@ -24,6 +24,8 @@ from random import randrange # random bridge numbers
 import sys # stdout without endl
 import os # clear screen
 import time # sleep
+import math # floor
+import random # range
 
 # Globals
 networkWidth = 7 # Bridge-Edge-Network-Edge-Bridge
@@ -288,6 +290,47 @@ def RemoveUnlinkedNetworks():
 					if h < networkHeight - 1:
 						network[w][h+1] = Empty()
 
+def RemoveRandomNetworks():
+	# Removal count
+	maxRemovalCount = 2
+
+	# Find odds to remove a network
+	totalNetworks = 0
+	for w in range(networkWidth):
+		for h in range(networkHeight):
+			if network[w][h].classType == "Network":
+				totalNetworks += 1
+	chance = math.ceil(100.0 / totalNetworks)
+
+	# Remove networks
+	removedCount = 0
+	for w in range(networkWidth):
+		if w == 0 or w == networkWidth - 1:
+			continue
+
+		for h in range(networkHeight):
+			if h == 0 or h == networkHeight - 1:
+				continue
+
+			if network[w][h].classType == "Network":
+				if random.randint(0,100) <= chance:
+					network[w][h] = Empty()
+					if w > 0:
+						network[w-1][h] = Empty()
+					if w < networkWidth - 1:
+						network[w+1][h] = Empty()
+					if h > 0:
+						network[w][h-1] = Empty()
+					if h < networkHeight - 1:
+						network[w][h+1] = Empty()
+
+					removedCount += 1
+					if removedCount >= maxRemovalCount:
+						return
+				else:
+					# Increase the odds
+					chance *= 3
+
 def GetPaths(aStep, aPreviousSteps, aW, aH):
 	global rootPaths
 	global rootW
@@ -338,6 +381,7 @@ def main():
 		while True:
 			try:
 				GenerateField()
+				RemoveRandomNetworks()
 				SolveEdgeLabeling()
 				RemoveUnlinkedNetworks()
 				break

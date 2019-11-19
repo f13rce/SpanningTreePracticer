@@ -15,8 +15,6 @@ Example images:
 
 ![Spanning Tree Practiser - Root identification](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExample.png)
 
-![Spanning Tree Practiser - Edge classification](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExample2.png)
-
 # Installation
 
 Clone the repository:

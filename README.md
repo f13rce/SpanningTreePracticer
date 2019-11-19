@@ -13,7 +13,7 @@ It is possible to scale up the network by modifying the global variables "networ
 
 Example images:
 
-![Spanning Tree Practiser - Root identification](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExample.png)
+![Spanning Tree Practiser - Root identification](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExampleImage.png)
 
 # Installation
 

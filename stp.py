@@ -43,16 +43,17 @@ rootH = -1
 # Classes
 class Edge:
 	classType = "Edge"
-	representation = "-XY-"
 	representationHor = "-XY-"
 	representationVer = "|XY|"
+	representation = representationHor
 	type = 0 # 0 = Unassigned; 1 = Root Port; 2 = Designated Port; 3 = Blocked Port;
 	typeColors = ["white", "blue", "green", "red"]
 	isHor = True
 	color = typeColors[0]
 	answer = "??"
+	port = -1
 
-	def UseVerticalRepresentation(self):
+	def UseHorizontalRepresentation(self):
 		self.representation = self.representationHor
 		self.isHor = True
 
@@ -60,22 +61,31 @@ class Edge:
 		self.representation = self.representationVer
 		self.isHor = False
 
+	def SetPortNumber(self, aVal):
+		self.port = aVal
+		portStr = list(str(aVal))
+		reprStr = list(self.representation)
+		reprStr[1] = portStr[0]
+		reprStr[2] = portStr[1]
+		self.representation = "".join(reprStr)
+
 	def SetEdgeType(self, aName):
 		# Naming in representation
-		if self.isHor:
-			self.representation = self.representationHor.replace("X", aName[0]).replace("Y", aName[1])
-		else:
-			self.representation = self.representationVer.replace("X", aName[0]).replace("Y", aName[1])
+		reprStr = list(self.representation)
+		reprStr[1] = aName[0]
+		reprStr[2] = aName[1]
+		self.representation = "".join(reprStr)
 
 		# Coloring
-		if aName == "??":
-			self.color = self.typeColors[0]
 		if aName == "RP":
 			self.color = self.typeColors[1]
-		if aName == "DP":
+		elif aName == "DP":
 			self.color = self.typeColors[2]
-		if aName == "BP":
+		elif aName == "BP":
 			self.color = self.typeColors[3]
+		else:
+			self.color = self.typeColors[0]
+
 
 	def SetAnswer(self, aAnswer):
 		self.answer = aAnswer
@@ -121,6 +131,7 @@ def GenerateField():
 
 
 	randValues = []
+	portNumbers = []
 	networkNameCount = 0
 
 	for w in range(networkWidth):
@@ -150,6 +161,18 @@ def GenerateField():
 				network[w][h] = Edge()
 				if w % 2 != 0:
 					network[w][h].UseVerticalRepresentation()
+				else:
+					network[w][h].UseHorizontalRepresentation()
+
+				# Pick a random number as hop value - make sure it's unique
+				number = 0
+				while True:
+					number = 10 + randrange(89)
+					if not number in portNumbers:
+						portNumbers.append(number)
+						break
+				network[w][h].SetPortNumber(number)
+
 			# Empty
 			else:
 				network[w][h] = Empty()
@@ -230,9 +253,9 @@ def SolveEdgeLabeling():
 
 		#print("Shortest path length: {} | Total paths: {}".format(shortestLen, len(shortestPaths)))
 
-		# Find shortest path of those based on hop values
+		# Tie breaker: find shortest path based on hop values from bridges
 		minScore = 99999
-		shortestPath = None
+		shortestCountPaths = []
 		for shortPath in shortestPaths:
 			count = 0
 			for entry in shortPath:
@@ -240,14 +263,30 @@ def SolveEdgeLabeling():
 					count += network[entry[0]][entry[1]].value
 
 			if count < minScore:
-				shortestPath = shortPath
 				minScore = count
+				shortestCountPaths = []
+				shortestCountPaths.append(shortPath)
+			elif count == minScore:
+				shortestCountPaths.append(shortPath)
 
 		#print("Shortest route: {} | Path: {}".format(minScore, repr(shortestPath)))
 
+		# Tie breaker: Lowest port number
+		shortestPath = None
+		if len(shortestCountPaths) > 1:
+			minPort = 999999
+			for path in shortestCountPaths:
+				if network[path[1][0]][path[1][1]].port < minPort:
+					minPort = network[path[1][0]][path[1][1]].port
+					shortestPath = path
+		else:
+			shortestPath = shortestCountPaths[0]
+
 		# Solve it
-		isFromBridge = True
-		for entry in shortestPath:
+		isFromBridge = False
+		#for entry in shortestPath:
+		for i in range(len(shortestPath)):
+			entry = shortestPath[i]
 			if network[entry[0]][entry[1]].classType == "Bridge":
 				isFromBridge = True
 			elif network[entry[0]][entry[1]].classType == "Network":
@@ -257,6 +296,43 @@ def SolveEdgeLabeling():
 					network[entry[0]][entry[1]].SetAnswer("RP")
 				else:
 					network[entry[0]][entry[1]].SetAnswer("DP")
+
+	# Apply port numbers
+	# Find duplicate RP entries, but pick one where the others become a BP
+	for w in range(networkWidth):
+		for h in range(networkHeight):
+			rootPorts = []
+			if network[w][h].classType == "Bridge":
+				if w > 0:
+					if network[w-1][h].classType == "Edge":
+						if network[w-1][h].answer == "RP":
+							rootPorts.append((w - 1, h))
+				if w < networkWidth - 1:
+					if network[w+1][h].classType == "Edge":
+						if network[w+1][h].answer == "RP":
+							rootPorts.append((w + 1, h))
+				if h > 0:
+					if network[w][h-1].classType == "Edge":
+						if network[w][h-1].answer == "RP":
+							rootPorts.append((w, h - 1))
+				if h < networkHeight - 1:
+					if network[w][h+1].classType == "Edge":
+						if network[w][h+1].answer == "RP":
+							rootPorts.append((w, h + 1))
+
+			if len(rootPorts) > 1:
+				#print("Removing duplicate root ports, picking lowest port and others will become BP")
+				lowestPort = (-1, -1)
+				minPort = 99999
+				for rp in rootPorts:
+					if network[rp[0]][rp[1]].port < minPort:
+						lowestPort = network[rp[0]][rp[1]].port
+						lowestPort = rp
+				for rp in rootPorts:
+					if rp == lowestPort:
+						continue
+					network[rp[0]][rp[1]].SetAnswer("BP")
+
 
 def RemoveUnlinkedNetworks():
 	global network
@@ -385,7 +461,7 @@ def main():
 				SolveEdgeLabeling()
 				RemoveUnlinkedNetworks()
 				break
-			except:
+			except IndexError:
 				# Something went wrong in the generation...
 				# I'll let it retry until it just workTM :^)
 				pass
@@ -421,6 +497,12 @@ def DrawHeader():
 #######################################################################", "magenta")
 	)
 
+def DrawLabeling():
+	print("Labeling:")
+	print(colored("\t[XY]: Bridge, where XY is the ID based on its MAC address and configured priority", "magenta"))
+	print(colored("\t-XY-: Edge (horizontal), where XY is the port number", "white"))
+	print(colored("\t|XY|: Edge (vertical), where XY is the port number", "white"))
+	print(colored("\t{XY}: Network, where XY is the network name", "cyan"))
 
 def AskRootID():
 	# Root ID
@@ -431,11 +513,7 @@ def AskRootID():
 		DrawField()
 		while True:
 			print("")
-			print("Labeling:")
-			print(colored("\t[XY]: Bridge", "magenta"))
-			print(colored("\t-XY-: Edge (horizontal)", "white"))
-			print(colored("\t|XY|: Edge (vertical)", "white"))
-			print(colored("\t{XY}: Network", "cyan"))
+			DrawLabeling()
 			print("")
 			try:
 				rootInputID = int(input("Which bridge is the root (number only)? "))
@@ -487,6 +565,12 @@ def AskEdgeLabeling():
 	# Wait a bit before clearing the screen
 	time.sleep(1)
 
+	if __TEST_EDGE__:
+		print("PRE:")
+		print("Root bridge: {}".format(colored("[{}]".format(GetRootID()), "magenta")))
+		DrawField()
+		print("POST:")
+
 	global highlightW
 	global highlightH
 
@@ -513,9 +597,8 @@ def AskEdgeLabeling():
 					highlightW = w
 					highlightH = h
 					DrawField()
-
 					print("")
-					print("(Note that some answers could theoretically be correct, but is routed differently instead in this exercise.)")
+					DrawLabeling()
 					print("")
 
 					# Draw field and let user guess

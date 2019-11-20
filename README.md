@@ -23,7 +23,7 @@ HTTPS: ``git clone https://github.com/f13rce/SpanningTreePractiser.git && cd Spa
 
 Install the required packages:
 
-``pip3 install -r requirements.txt``
+``pip3 install -r requirements.txt --user``
 
 If this doesn't work try:
 

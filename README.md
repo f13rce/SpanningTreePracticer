@@ -37,4 +37,4 @@ Then run the script:
 
 See requirements.txt. Also requires a terminal with non-personalized output colors for proper coloring, which is needed to answer questions about highlighted sections.
 
-To install the requirements, type in your terminal: ``pip3 install -r requirements.txt``
+To install the requirements, type in your terminal: ``pip3 install -r requirements.txt --user``

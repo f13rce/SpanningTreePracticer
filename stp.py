@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #######################################################################
 #######################################################################
 #######################################################################
@@ -21,15 +22,12 @@
 # Imports
 from termcolor import colored  # colored outputs
 from random import randrange  # random bridge numbers
+from argparse import ArgumentParser # argument parser
 import sys  # stdout without endl
 import os  # clear screen
 import time  # sleep
 import math  # floor
 import random  # range
-
-# Globals
-networkWidth = 7  # Bridge-Edge-Network-Edge-Bridge
-networkHeight = 7  # Same but vertical
 
 network = []  # network[X][Y] = Edge,Network,(or)Bridge
 
@@ -126,7 +124,34 @@ class Empty:
 
 
 # Funcs
-def GenerateField():
+def parse_args(args=None):
+    parser = ArgumentParser("This script will help you practise with spanning tree protocol topologies")
+    parser.add_argument('--disable-banner', action='store_true', help='Disable script banner')
+    size_args = parser.add_argument_group(
+        'Network size',
+        'Specify the network size parameters, these can be between 3 and 11 bridges '
+        'and it has to be an odd number of bridges'
+    )
+    size_args.add_argument(
+        '-w',
+        '--width',
+        type=int,
+        choices=list(filter(lambda x: (x % 2 != 0), range(3, 12))),
+        default=7,
+        help='The width of the topology in bridges (default: 7)'
+    )
+    size_args.add_argument(
+        '-H',
+        '--height',
+        type=int,
+        choices=list(filter(lambda x: (x % 2 != 0), range(3, 12))),
+        default=7,
+        help='The height of the topology in bridges (default: 7)'
+    )
+    return parser.parse_args(args)
+
+
+def GenerateField(networkWidth, networkHeight):
     global network
 
     # Initialize network array
@@ -183,7 +208,7 @@ def GenerateField():
                 network[w][h] = Empty()
 
 
-def DrawField():
+def DrawField(networkWidth, networkHeight):
     global highlightW
     global highlightH
 
@@ -198,7 +223,7 @@ def DrawField():
         sys.stdout.write("\n")
 
 
-def GetRootID():
+def GetRootID(networkWidth, networkHeight):
     # Find root ID based on the lowest bridge value
     lowestID = 99999
     for w in range(networkWidth):
@@ -216,13 +241,13 @@ def GetRootID():
 rootPaths = []
 
 
-def SolveEdgeLabeling():
+def SolveEdgeLabeling(networkWidth, networkHeight):
     global rootPaths
     global rootW
     global rootH
 
     # Get root ID
-    rootID = int(GetRootID())
+    rootID = int(GetRootID(networkWidth, networkHeight))
 
     # Find root X/Y
     bridges = []
@@ -246,7 +271,7 @@ def SolveEdgeLabeling():
         rootPaths = []
         # print("Finding paths to root ({}) from bridge {}".format(repr((rootW, rootH)), repr((bridge[0], bridge[1]))))
         path = []
-        GetPaths(0, path, bridge[0], bridge[1])
+        GetPaths(0, path, bridge[0], bridge[1], networkWidth, networkHeight)
         paths = rootPaths
 
         # Find shortest paths based on hop count
@@ -344,7 +369,7 @@ def SolveEdgeLabeling():
                     network[rp[0]][rp[1]].SetAnswer("BP")
 
 
-def RemoveUnlinkedNetworks():
+def RemoveUnlinkedNetworks(networkWidth, networkHeight):
     global network
 
     for w in range(networkWidth):
@@ -377,7 +402,7 @@ def RemoveUnlinkedNetworks():
                         network[w][h + 1] = Empty()
 
 
-def RemoveRandomNetworks():
+def RemoveRandomNetworks(networkWidth, networkHeight):
     # Removal count
     maxRemovalCount = 2
 
@@ -419,7 +444,7 @@ def RemoveRandomNetworks():
                     chance *= 3
 
 
-def GetPaths(aStep, aPreviousSteps, aW, aH):
+def GetPaths(aStep, aPreviousSteps, aW, aH, networkWidth, networkHeight):
     global rootPaths
     global rootW
     global rootH
@@ -440,39 +465,39 @@ def GetPaths(aStep, aPreviousSteps, aW, aH):
     # Left
     if aW > 0 and (aW - 1, aH) not in steps:
         if network[aW - 1][aH].classType != "Empty":
-            GetPaths(aStep, steps, aW - 1, aH)
+            GetPaths(aStep, steps, aW - 1, aH, networkWidth, networkHeight)
 
     # Right
     if aW + 1 < networkWidth - 1 and (aW + 1, aH) not in aPreviousSteps:
         if network[aW + 1][aH].classType != "Empty":
-            GetPaths(aStep, steps, aW + 1, aH)
+            GetPaths(aStep, steps, aW + 1, aH, networkWidth, networkHeight)
 
     # Up
     if aH + 1 < networkHeight - 1 and (aW, aH + 1) not in aPreviousSteps:
         if network[aW][aH + 1].classType != "Empty":
-            GetPaths(aStep, steps, aW, aH + 1)
+            GetPaths(aStep, steps, aW, aH + 1, networkWidth, networkHeight)
 
     # Down
     if aH > 0 and (aW, aH - 1) not in aPreviousSteps:
         if network[aW][aH - 1].classType != "Empty":
-            GetPaths(aStep, steps, aW, aH - 1)
+            GetPaths(aStep, steps, aW, aH - 1, networkWidth, networkHeight)
 
 
 # Main
-def main():
-    global highlightW
-    global highlightH
+def main(args=None):
+    args = parse_args(args)
 
-    DrawHeader()
+    if not args.disable_banner:
+        DrawHeader()
 
     while True:
         # Create exercise field
         while True:
             try:
-                GenerateField()
-                RemoveRandomNetworks()
-                SolveEdgeLabeling()
-                RemoveUnlinkedNetworks()
+                GenerateField(args.width, args.height)
+                RemoveRandomNetworks(args.width, args.height)
+                SolveEdgeLabeling(args.width, args.height)
+                RemoveUnlinkedNetworks(args.width, args.height)
                 break
             except IndexError:
                 # Something went wrong in the generation...
@@ -480,9 +505,9 @@ def main():
                 pass
 
         # Ask questions
-        AskRootID()
+        AskRootID(args.width, args.height)
         AskAbbreviations()
-        AskEdgeLabeling()
+        AskEdgeLabeling(args.width, args.height)
 
         # Done!
         print(colored("All done!", "green"))
@@ -520,13 +545,13 @@ def DrawLabeling():
     print(colored("\t{XY}: Network, where XY is the network name", "cyan"))
 
 
-def AskRootID():
+def AskRootID(networkWidth, networkHeight):
     # Root ID
-    rootID = int(GetRootID())
+    rootID = int(GetRootID(networkWidth, networkHeight))
     while True:
         print("")
         print("Consider the following network:")
-        DrawField()
+        DrawField(networkWidth, networkHeight)
         while True:
             print("")
             DrawLabeling()
@@ -578,14 +603,14 @@ def AskAbbreviations():
 __TEST_EDGE__ = False
 
 
-def AskEdgeLabeling():
+def AskEdgeLabeling(networkWidth, networkHeight):
     # Wait a bit before clearing the screen
     time.sleep(1)
 
     if __TEST_EDGE__:
         print("PRE:")
-        print("Root bridge: {}".format(colored("[{}]".format(GetRootID()), "magenta")))
-        DrawField()
+        print("Root bridge: {}".format(colored("[{}]".format(GetRootID(networkWidth, networkHeight)), "magenta")))
+        DrawField(networkWidth, networkHeight)
         print("POST:")
 
     global highlightW
@@ -613,7 +638,7 @@ def AskEdgeLabeling():
                     print("In the context of the same network:")
                     highlightW = w
                     highlightH = h
-                    DrawField()
+                    DrawField(networkWidth, networkHeight)
                     print("")
                     DrawLabeling()
                     print("")
@@ -635,7 +660,7 @@ def AskEdgeLabeling():
 
     print("")
     print("Final network:")
-    DrawField()
+    DrawField(networkWidth, networkHeight)
     print("")
 
 

@@ -336,7 +336,7 @@ def SolveEdgeLabeling():
                 minPort = 99999
                 for rp in rootPorts:
                     if network[rp[0]][rp[1]].port < minPort:
-                        lowestPort = network[rp[0]][rp[1]].port
+                        minPort = network[rp[0]][rp[1]].port
                         lowestPort = rp
                 for rp in rootPorts:
                     if rp == lowestPort:

@@ -507,7 +507,7 @@ def main(args=None):
         # Ask questions
         AskRootID(args.width, args.height)
         AskAbbreviations()
-        AskEdgeLabeling(args.width, args.height)
+        AskEdgeLabeling(args.width, args.height, drawheader=True if not args.disable_banner else False)
 
         # Done!
         print(colored("All done!", "green"))
@@ -603,7 +603,7 @@ def AskAbbreviations():
 __TEST_EDGE__ = False
 
 
-def AskEdgeLabeling(networkWidth, networkHeight):
+def AskEdgeLabeling(networkWidth, networkHeight, drawheader=True):
     # Wait a bit before clearing the screen
     time.sleep(1)
 
@@ -631,7 +631,8 @@ def AskEdgeLabeling(networkWidth, networkHeight):
                         # Ignore OS-relates errors
                         pass
 
-                    DrawHeader()
+                    if drawheader:
+                        DrawHeader()
 
                     # Draw the field
                     print("")

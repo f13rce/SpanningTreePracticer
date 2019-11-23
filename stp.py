@@ -127,6 +127,7 @@ class Empty:
 def parse_args(args=None):
     parser = ArgumentParser("This script will help you practise with spanning tree protocol topologies")
     parser.add_argument('--disable-banner', action='store_true', help='Disable script banner')
+    parser.add_argument('-s', '--skip-abbreviations', action='store_true', help='Do not ask abbreviation questions')
     size_args = parser.add_argument_group(
         'Network size',
         'Specify the network size parameters, these can be between 3 and 11 bridges '
@@ -506,7 +507,8 @@ def main(args=None):
 
         # Ask questions
         AskRootID(args.width, args.height)
-        AskAbbreviations()
+        if not args.skip_abbreviations:
+            AskAbbreviations()
         AskEdgeLabeling(args.width, args.height, drawheader=True if not args.disable_banner else False)
 
         # Done!

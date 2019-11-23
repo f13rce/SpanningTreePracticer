@@ -22,7 +22,7 @@
 # Imports
 from termcolor import colored  # colored outputs
 from random import randrange  # random bridge numbers
-from argparse import ArgumentParser # argument parser
+from argparse import ArgumentParser  # argument parser
 import sys  # stdout without endl
 import os  # clear screen
 import time  # sleep
@@ -506,10 +506,15 @@ def main(args=None):
                 pass
 
         # Ask questions
-        AskRootID(args.width, args.height)
+        errors = AskRootID(args.width, args.height)
         if not args.skip_abbreviations:
-            AskAbbreviations()
-        AskEdgeLabeling(args.width, args.height, drawheader=True if not args.disable_banner else False)
+            errors += AskAbbreviations()
+        AskEdgeLabeling(
+            args.width,
+            args.height,
+            drawheader=True if not args.disable_banner else False,
+            errors=errors
+        )
 
         # Done!
         print(colored("All done!", "green"))
@@ -550,6 +555,7 @@ def DrawLabeling():
 def AskRootID(networkWidth, networkHeight):
     # Root ID
     rootID = int(GetRootID(networkWidth, networkHeight))
+    errors = 0
     while True:
         print("")
         print("Consider the following network:")
@@ -567,11 +573,14 @@ def AskRootID(networkWidth, networkHeight):
             print(colored("Correct!", "green"))
             break
         else:
+            errors += 1
             print(colored("Incorrect, try again.", "red"))
+    return errors
 
 
 def AskAbbreviations():
     # Abbreviations
+    errors = 0
     # DP
     while True:
         inp = input("What does DP stand for? ").lower()
@@ -579,6 +588,7 @@ def AskAbbreviations():
             print(colored("Correct!", "green"))
             break
         else:
+            errors += 1
             print(colored("Incorrect, try again.", "red"))
 
     # RP
@@ -590,6 +600,7 @@ def AskAbbreviations():
         elif inp == "research project":
             print(colored("Well yes, but actually no.", "red"))
         else:
+            errors += 1
             print(colored("Incorrect, try again.", "red"))
 
     # BP
@@ -599,13 +610,14 @@ def AskAbbreviations():
             print(colored("Correct!", "green"))
             break
         else:
+            errors += 1
             print(colored("Incorrect, try again.", "red"))
-
+    return errors
 
 __TEST_EDGE__ = False
 
 
-def AskEdgeLabeling(networkWidth, networkHeight, drawheader=True):
+def AskEdgeLabeling(networkWidth, networkHeight, drawheader=True, errors=0):
     # Wait a bit before clearing the screen
     time.sleep(1)
 
@@ -658,6 +670,7 @@ def AskEdgeLabeling(networkWidth, networkHeight, drawheader=True):
                             highlightH = -1
                             break
                         else:
+                            errors += 1
                             print(colored("Incorrect, try again", "red"))
                         # print("Answer was: {}".format(network[w][h].answer))
 
@@ -665,6 +678,15 @@ def AskEdgeLabeling(networkWidth, networkHeight, drawheader=True):
     print("Final network:")
     DrawField(networkWidth, networkHeight)
     print("")
+    if errors:
+        print(
+            colored(
+                "You had {} error(s) while solving this topology, feel free to try another :)".format(errors),
+                "red"
+            )
+        )
+    else:
+        print(colored("Flawless victory! Get ready to pass INR (the STP part at least)", "green"))
 
 
 if __name__ == "__main__":

@@ -33,6 +33,31 @@ Then run the script:
 
 ``python3 stp.py``
 
+# Usage
+
+The script allows one to modify its network size, as well as skipping abbreviation questions. Use the ``--help`` command to find out how to use this:
+
+```
+$ python stp.py --help
+usage: This script will help you practise with spanning tree protocol topologies
+       [-h] [--disable-banner] [-s] [-w {3,5,7,9,11}] [-H {3,5,7,9,11}]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --disable-banner      Disable script banner
+  -s, --skip-abbreviations
+                        Do not ask abbreviation questions
+
+Network size:
+  Specify the network size parameters, these can be between 3 and 11 bridges
+  and it has to be an odd number of bridges
+
+  -w {3,5,7,9,11}, --width {3,5,7,9,11}
+                        The width of the topology in bridges (default: 7)
+  -H {3,5,7,9,11}, --height {3,5,7,9,11}
+                        The height of the topology in bridges (default: 7)
+```
+
 # Requirements
 
 See requirements.txt. Also requires a terminal with non-personalized output colors for proper coloring, which is needed to answer questions about highlighted sections.

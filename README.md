@@ -1,4 +1,4 @@
-# SpanningTreePractiser
+# SpanningTreePracticer
 Helps you understand the inner workings of the Spanning Tree protocol. An algorithm was used to solve the tree for you, where you get questions on how each edge should be defined.
 
 There are 3 types of questions in this script:
@@ -9,7 +9,7 @@ There are 3 types of questions in this script:
 
 Example image:
 
-![Spanning Tree Practiser - Root identification](https://raw.githubusercontent.com/f13rce/SpanningTreePractiser/master/STPExampleImage.png)
+![Spanning Tree Practicer - Root identification](https://raw.githubusercontent.com/f13rce/SpanningTreePracticer/master/STPExampleImage.png)
 
 It is possible to scale up the network by modifying the global variables "networkWidth" and "networkHeight". Be sure to make it an uneven amount larger than 5, since you need 3 components per connection: Bridge <-> Edge <-> Network (<-> Edge <-> Bridge).
 
@@ -17,9 +17,9 @@ It is possible to scale up the network by modifying the global variables "networ
 
 Clone the repository:
 
-SSH: ``git clone git@github.com:/f13rce/SpanningTreePractiser.git && cd SpanningTreePractiser``
+SSH: ``git clone git@github.com:/f13rce/SpanningTreePracticer.git && cd SpanningTreePracticer``
 
-HTTPS: ``git clone https://github.com/f13rce/SpanningTreePractiser.git && cd SpanningTreePractiser``
+HTTPS: ``git clone https://github.com/f13rce/SpanningTreePracticer.git && cd SpanningTreePracticer``
 
 Install the required packages:
 
@@ -39,7 +39,7 @@ The script allows one to modify its network size, as well as skipping abbreviati
 
 ```
 $ python stp.py --help
-usage: This script will help you practise with spanning tree protocol topologies
+usage: This script will help you practice with spanning tree protocol topologies
        [-h] [--disable-banner] [-s] [-w {3,5,7,9,11}] [-H {3,5,7,9,11}]
 
 optional arguments:
